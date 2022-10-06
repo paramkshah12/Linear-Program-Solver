@@ -1,4 +1,3 @@
-from sys import stdin
 from src.tableau import *
 import numpy as np
 
@@ -6,6 +5,7 @@ class LinearProgram():
     def __init__(self):
         self.takeInput()
         self.tableau = Tableau(self.matrixA, self.matrixB, self.c)
+        self.solution = None
 
     def takeInput(self):
         print("Do you wish to maximise (Y) or minimize (N) the cost function?")
@@ -42,9 +42,21 @@ class LinearProgram():
         self.matrixB=np.array(self.matrixB)
 
     def solve(self):
-        pass
-
+        while(True):
+            pivot = self.tableau.getPivot()
+            if(pivot == (-2, -2)):
+                #Recursion Over, Now solve Linear Equations
+                break   
+            if(pivot == (-1, -1)):
+                #Solution is INF
+                self.solution = float('inf')
+                break 
+            self.tableau.gaussTransform(pivot)
+            
     def getSoln(self):
-        print(self.tableau.getPivot())
+        if(self.solution == float('inf')):
+            print("Cost function is unbounded!")
+            return
+        print(self.tableau.tableau)
 
 

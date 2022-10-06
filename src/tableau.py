@@ -16,8 +16,9 @@ class Tableau():
 
     def getPivot(self):
         index=np.argmin(self.tableau[self.m,0:self.m+self.n])
+        #Recursion Over
         if(self.tableau[self.m,index]>=0):
-            return (-1,-1)
+            return (-2,-2)
         else:
             min=float('inf')
             mini=-1
@@ -26,7 +27,17 @@ class Tableau():
                     if(self.tableau[i,self.n+self.m+1]/self.tableau[i,index]<min):
                         min=self.tableau[i,self.n+self.m+1]/self.tableau[i,index]
                         mini=i
+            #All entries of column are zero => Solution is infinite
             if(mini==-1):
                 return (-1,-1)
             else:
-                return (mini,index) 
+                return (mini,index)
+    
+    def gaussTransform(self, pivot):
+        x, y = pivot 
+        #fill exception
+        for i in range(self.m + 1):
+            if (i == x):
+               self.tableau[i] = self.tableau[i] / self.tableau[pivot] 
+            else:
+                self.tableau[i] = self.tableau[i]-self.tableau[x]*self.tableau[i,y]/self.tableau[pivot]
